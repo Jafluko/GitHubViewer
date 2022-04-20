@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GithubViewer</string>
+
+    <string name="hint_text_input">Access Token GitHub</string>
+    <string name="example_string">Hi it\'s my app</string>
+    <!--ImageDescription-->
+    <string name="icon">GitHub</string>
+    <!--Button-->
+    <string name="btn_auth">Авторизация</string>
+
+    <!--Warning Message-->
+    <string name="warning_empty_list">Нет репозиториев</string>
+    <string name="warning_error_connection">Произошла ошибка подключения</string>
+</resources>
