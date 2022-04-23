@@ -1,6 +1,7 @@
 package com.example.githubviewer.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,8 +38,9 @@ class AuthFragment : Fragment(R.layout.auth_fragment) {
         viewBinding =
             AuthFragmentBinding.inflate(inflater, container, false)
         (requireActivity() as MainActivity).supportActionBar?.hide()
-        store.authToken = "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"
-        viewBinding.btnAuth.setOnClickListener { viewModel.onSignButtonPressed(/*viewBinding.tokenTextInput.*/) }
+        viewBinding.btnAuth.setOnClickListener {
+            viewModel.onSignButtonPressed(viewBinding.tokenTextInput.text.toString())
+        }
         return viewBinding.root
     }
 

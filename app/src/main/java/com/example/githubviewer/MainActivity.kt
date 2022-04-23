@@ -14,9 +14,6 @@ class MainActivity : AppCompatActivity() {
 
     private val navController: NavController by lazy { getNavigationController() }
 
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setSupportActionBar(findViewById(R.id.toolbar))

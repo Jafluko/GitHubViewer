@@ -49,7 +49,7 @@ class ApiService {
     fun getApiClient(okHttpClient: OkHttpClient, json: Json): Api = Retrofit.Builder()
         .baseUrl("https://api.github.com")
         .client(okHttpClient)
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        //.addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(json.asConverterFactory(contentType))
         .build()
         .create(Api::class.java)
