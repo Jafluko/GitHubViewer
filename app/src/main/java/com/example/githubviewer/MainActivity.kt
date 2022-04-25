@@ -25,14 +25,4 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         return navHostFragment.navController
     }
-
-    /*private fun navigateToAuth() {
-        val action = AuthFragmentDirections.actionAuthorization()
-        navController.navigate(action)
-    }*/
-
-    /*private fun navigateToRepoList() {
-        val action = AuthFragmentDirections.actionAuthorization()
-        navController.navigate(action)
-    }*/
 }
