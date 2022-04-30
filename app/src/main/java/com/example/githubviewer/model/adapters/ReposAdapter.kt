@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.githubviewer.databinding.ItemBinding
 import com.example.githubviewer.model.Repo
 
-class ReposAdapter : RecyclerView.Adapter<ReposAdapter.RepoViewHolder>() {
+class ReposAdapter(private val click: (Int, String) -> Unit) : RecyclerView.Adapter<ReposAdapter.RepoViewHolder>() {
 
     private var reposList: List<Repo> = listOf()
 
@@ -28,6 +28,7 @@ class ReposAdapter : RecyclerView.Adapter<ReposAdapter.RepoViewHolder>() {
                     repoName.text = name
                     repoProgLeng.text = language
                     repoDescription.text = description
+                    layoutCard.setOnClickListener{ click(id!!, name!!) }
                 }
             }
         }

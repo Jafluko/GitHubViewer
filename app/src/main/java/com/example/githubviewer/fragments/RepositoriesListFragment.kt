@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubviewer.R
@@ -21,7 +22,9 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
 
     private lateinit var viewBinding: RepositoriesListFragmentBinding
     private val viewModel by viewModels<RepositoriesListViewModel>()
-    private val adapter: ReposAdapter = ReposAdapter()
+    private val adapter: ReposAdapter = ReposAdapter { index, repoName ->
+        navigateToRepoDetail(index, repoName)
+    }
 
     companion object {
         fun newInstance() = RepositoriesListFragment()
@@ -63,4 +66,8 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
         }
     }
 
+    private fun navigateToRepoDetail(index: Int, repoName: String) {
+        val action = RepositoriesListFragmentDirections.actionOpenDetail(repoId = index, repoName = repoName)
+        this.findNavController().navigate(action)
+    }
 }
