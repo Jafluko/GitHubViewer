@@ -18,9 +18,9 @@ class AppRepository @Inject constructor(private val apiClient: Api) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getRepository(repoId: String): Flow<RepoDetails> {
+    suspend fun getRepository(repoName: String, owner: String): Flow<RepoDetails> {
         return flow {
-            emit(apiClient.getRepository(repoId))
+            emit(apiClient.getRepository(repoName, owner))
         }.flowOn(Dispatchers.IO)
     }
 
@@ -30,7 +30,7 @@ class AppRepository @Inject constructor(private val apiClient: Api) {
         branchName: String
     ): Flow<String> {
         return flow {
-            emit(apiClient.getRepositoryReadme(ownerName, repositoryName/*, branchName*/))
+            emit(apiClient.getRepositoryReadme(ownerName, repositoryName, branchName))
         }.flowOn(Dispatchers.IO)
     }
 

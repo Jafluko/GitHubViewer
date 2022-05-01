@@ -15,14 +15,17 @@ interface Api {
         @Query("per_page") amount: Int = 10
     ): List<Repo>
 
-    @GET("/repos/{id}")
-    suspend fun getRepository(@Path("id") repoId: String): RepoDetails
+    @GET("/repos/{owner}/{repoName}")
+    suspend fun getRepository(
+        @Path("repoName") repoName: String,
+        @Path("owner") owner: String
+    ): RepoDetails
 
     @GET("/repos/{owner}/{repo}/readme")
     suspend fun getRepositoryReadme(
         @Path("owner") ownerName: String,
         @Path("repo") repositoryName: String,
-        //branchName: String
+        @Query("ref") branchName: String
     ): String
 
     @GET("/user")

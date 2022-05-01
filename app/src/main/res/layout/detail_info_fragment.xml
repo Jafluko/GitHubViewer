@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_description"
+        android:id="@+id/readMe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
