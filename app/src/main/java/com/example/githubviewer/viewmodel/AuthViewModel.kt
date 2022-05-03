@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubviewer.model.KeyValueStorage
+import com.example.githubviewer.model.Response
 import com.example.githubviewer.repositories.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -43,10 +44,17 @@ class AuthViewModel @Inject constructor(
     private fun signIn(token: String) {
         store.authToken = token
         viewModelScope.launch {
-            val res = appRepository.signIn().collect {
-                store.userName = it.login
-                actions.emit(Action.RouteToMain)
-                Log.d("EEEEE", it.login.toString() + " " + it.id.toString())
+            val res = appRepository.signIn().collect { user ->
+                when(user) {
+                    is Response.Success -> {
+                        store.userName = user.data!!.login
+                        actions.emit(Action.RouteToMain)
+                        Log.d("EEEEE", user.data.login.toString() + " " + user.data.id.toString())
+                    }
+                    is Response.Error -> {
+                        Log.d("Error", user.message!! + " " + user.code)
+                    }
+                }
             }
 
         }

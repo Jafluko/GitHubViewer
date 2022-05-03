@@ -1,11 +1,13 @@
 package com.example.githubviewer.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubviewer.model.KeyValueStorage
 import com.example.githubviewer.model.Repo
+import com.example.githubviewer.model.Response
 import com.example.githubviewer.repositories.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -33,8 +35,15 @@ class RepositoriesListViewModel @Inject constructor(
 
     private fun fetchRepos() {
         viewModelScope.launch {
-            appRepository.getRepositories(store.userName!!).collect {
-                state.value = State.Loaded(it)
+            appRepository.getRepositories(store.userName!!).collect { repos ->
+                when(repos) {
+                    is Response.Success -> {
+                        state.value = State.Loaded(repos.data!!)
+                    }
+                    is Response.Error -> {
+                        Log.d("Error", repos.message!!)
+                    }
+                }
             }
         }
     }

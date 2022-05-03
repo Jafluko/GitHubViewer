@@ -16,15 +16,27 @@ class AppRepository @Inject constructor(
     private val client: OkHttpClient
 ) {
 
-    suspend fun getRepositories(username: String): Flow<List<Repo>> {
+    suspend fun getRepositories(username: String): Flow<Response<List<Repo>>> {
         return flow {
-            emit(apiClient.getRepositories(username))
+            val response = apiClient.getRepositories(username)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(Response.Success(it))
+                }
+            }
+            emit(Response.Error(response.message(), response.code()))
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getRepository(repoName: String, owner: String): Flow<RepoDetails> {
+    suspend fun getRepository(repoName: String, owner: String): Flow<Response<RepoDetails>> {
         return flow {
-            emit(apiClient.getRepository(repoName, owner))
+            val response = apiClient.getRepository(repoName, owner)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(Response.Success(it))
+                }
+            }
+            emit(Response.Error(response.message(), response.code()))
         }.flowOn(Dispatchers.IO)
     }
 
@@ -41,7 +53,7 @@ class AppRepository @Inject constructor(
                 .url(requestUrl)
                 .build()
             val call = client.newCall(request)
-           // try {
+            try {
                 val response = call.execute()
                 if (response.isSuccessful) {
                     response.body?.let {
@@ -49,17 +61,25 @@ class AppRepository @Inject constructor(
                     }
                 }
                 emit(Response.Error("No README file", response.code))
-            /*} catch (error: Exception) {
+            } catch (error: Exception) {
                 Log.d("Error", error.localizedMessage!!)
                 emit(Response.Error(error.localizedMessage!!))
-            }*/
+            }
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun signIn(): Flow<UserInfo> {
+    suspend fun signIn(): Flow<Response<UserInfo>> {
         return flow {
-            emit(apiClient.signIn())
+            val response = apiClient.signIn()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(Response.Success(it))
+                }
+            }
+            if (response.code() == 401) {
+                emit(Response.Error("Wrong token", response.code()))
+            }
+            emit(Response.Error(response.message(), response.code()))
         }.flowOn(Dispatchers.IO)
-
     }
 }

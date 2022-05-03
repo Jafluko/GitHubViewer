@@ -26,16 +26,23 @@ class DetailInfoViewModel @Inject constructor(
     fun setInfo(repoId: Int, repoName: String) {
         viewModelScope.launch {
             val res = appRepository.getRepository(repoName, store.userName!!).collect { repo ->
-                state.value = State.Loaded(repo, ReadmeState.Loading)
-                val res = appRepository.getRepositoryReadme(store.userName!!, repoName, repo.branch!!).collect { readMe ->
-                    when(readMe) {
-                        is Response.Success -> {
-                            Log.d("rrrr", readMe.data!!)
-                            state.value = State.Loaded(repo, ReadmeState.Loaded(readMe.data))
-                        }
-                        is Response.Error -> {
+                when(repo) {
+                    is Response.Success -> {
+                        state.value = State.Loaded(repo.data!!, ReadmeState.Loading)
+                        val res = appRepository.getRepositoryReadme(store.userName!!, repoName, repo.data.branch!!).collect { readMe ->
+                            when(readMe) {
+                                is Response.Success -> {
+                                    Log.d("rrrr", readMe.data!!)
+                                    state.value = State.Loaded(repo.data, ReadmeState.Loaded(readMe.data))
+                                }
+                                is Response.Error -> {
 
+                                }
+                            }
                         }
+                    }
+                    is Response.Error -> {
+                        Log.d("Error", repo.message!!)
                     }
                 }
             }
