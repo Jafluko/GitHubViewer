@@ -15,6 +15,7 @@ import com.example.githubviewer.databinding.RepositoriesListFragmentBinding
 import com.example.githubviewer.viewmodel.DetailInfoViewModel
 import com.example.githubviewer.viewmodel.DetailInfoViewModel.*
 import dagger.hilt.android.AndroidEntryPoint
+import io.noties.markwon.Markwon
 
 @AndroidEntryPoint
 class DetailInfoFragment : Fragment(R.layout.detail_info_fragment) {
@@ -23,6 +24,8 @@ class DetailInfoFragment : Fragment(R.layout.detail_info_fragment) {
     private val viewModel by viewModels<DetailInfoViewModel>()
     private val args: DetailInfoFragmentArgs by navArgs()
 
+    private var markdown: Markwon? = null
+
     companion object {
         fun newInstance() = DetailInfoFragment()
     }
@@ -30,6 +33,7 @@ class DetailInfoFragment : Fragment(R.layout.detail_info_fragment) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        markdown = Markwon.create(requireContext())
         viewBinding = DetailInfoFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
@@ -60,7 +64,7 @@ class DetailInfoFragment : Fragment(R.layout.detail_info_fragment) {
 
                             }
                             is ReadmeState.Loaded -> {
-                                readMe.text = state.readmeState.toString()
+                                markdown?.setMarkdown(readMe, state.readmeState.markdown)
                             }
                             is ReadmeState.Empty -> {
 

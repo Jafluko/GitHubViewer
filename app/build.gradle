@@ -76,6 +76,9 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.4.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
+
+    //Markdown
+    implementation "io.noties.markwon:core:4.6.2"
 }
 
 kapt {

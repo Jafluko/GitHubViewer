@@ -1,5 +1,6 @@
 package com.example.githubviewer.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.githubviewer.model.KeyValueStorage
 import com.example.githubviewer.model.Repo
 import com.example.githubviewer.model.RepoDetails
+import com.example.githubviewer.model.Response
 import com.example.githubviewer.repositories.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -25,9 +27,17 @@ class DetailInfoViewModel @Inject constructor(
         viewModelScope.launch {
             val res = appRepository.getRepository(repoName, store.userName!!).collect { repo ->
                 state.value = State.Loaded(repo, ReadmeState.Loading)
-                /*val res = appRepository.getRepositoryReadme(store.userName!!, repoName, repo.branch!!).collect { readMe ->
-                    state.value = State.Loaded(repo, ReadmeState.Loaded(readMe))
-                }*/
+                val res = appRepository.getRepositoryReadme(store.userName!!, repoName, repo.branch!!).collect { readMe ->
+                    when(readMe) {
+                        is Response.Success -> {
+                            Log.d("rrrr", readMe.data!!)
+                            state.value = State.Loaded(repo, ReadmeState.Loaded(readMe.data))
+                        }
+                        is Response.Error -> {
+
+                        }
+                    }
+                }
             }
         }
     }

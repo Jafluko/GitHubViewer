@@ -1,5 +1,6 @@
 package com.example.githubviewer.repositories.api
 
+import com.example.githubviewer.model.ReadMe
 import com.example.githubviewer.model.Repo
 import com.example.githubviewer.model.RepoDetails
 import com.example.githubviewer.model.UserInfo
@@ -21,7 +22,7 @@ interface Api {
         @Path("owner") owner: String
     ): RepoDetails
 
-    @GET("/repos/{owner}/{repo}/readme")
+    @GET("/repos/{owner}/{repo}/README.md")
     suspend fun getRepositoryReadme(
         @Path("owner") ownerName: String,
         @Path("repo") repositoryName: String,
