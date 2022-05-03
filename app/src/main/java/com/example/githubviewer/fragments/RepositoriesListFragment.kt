@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.githubviewer.MainActivity
 import com.example.githubviewer.R
 import com.example.githubviewer.databinding.RepositoriesListFragmentBinding
 import com.example.githubviewer.model.adapters.ReposAdapter
@@ -35,6 +36,12 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
         savedInstanceState: Bundle?
     ): View {
         viewBinding = RepositoriesListFragmentBinding.inflate(inflater, container, false)
+
+        (requireActivity() as MainActivity).supportActionBar?.run {
+            title = "Repositories"
+            setDisplayHomeAsUpEnabled(true)
+            show()
+        }
         return viewBinding.root
     }
 

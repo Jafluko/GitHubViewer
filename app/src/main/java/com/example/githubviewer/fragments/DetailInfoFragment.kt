@@ -1,19 +1,22 @@
 package com.example.githubviewer.fragments
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.githubviewer.MainActivity
 import com.example.githubviewer.R
 import com.example.githubviewer.databinding.DetailInfoFragmentBinding
-import com.example.githubviewer.databinding.RepositoriesListFragmentBinding
 import com.example.githubviewer.viewmodel.DetailInfoViewModel
-import com.example.githubviewer.viewmodel.DetailInfoViewModel.*
+import com.example.githubviewer.viewmodel.DetailInfoViewModel.ReadmeState
+import com.example.githubviewer.viewmodel.DetailInfoViewModel.State
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
 
@@ -35,6 +38,18 @@ class DetailInfoFragment : Fragment(R.layout.detail_info_fragment) {
     ): View {
         markdown = Markwon.create(requireContext())
         viewBinding = DetailInfoFragmentBinding.inflate(inflater, container, false)
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                back()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), onBackPressedCallback)
+        (requireActivity() as MainActivity).supportActionBar?.run {
+            title = args.repoName
+            setDisplayHomeAsUpEnabled(true)
+            show()
+        }
         return viewBinding.root
     }
 
@@ -86,4 +101,8 @@ class DetailInfoFragment : Fragment(R.layout.detail_info_fragment) {
         viewModel.setInfo(args.repoId, args.repoName)
     }
 
+    private fun back() {
+        val action = DetailInfoFragmentDirections.actionBack()
+        this.findNavController().navigate(action)
+    }
 }
